@@ -1,4 +1,4 @@
-package com.sendhrresume.batch;
+package com.sendhrresume.batch.pdf;
 
 import com.sendhrresume.entity.User;
 import com.sendhrresume.service.UserService;

@@ -1,0 +1,32 @@
+1. start spring-batch send email operation using user-action
+
+- kafka command
+    - view all the topics
+        - .\bin\windows\kafka-console-consumer.bat --topic email.result.sendHr --from-beginning --bootstrap-server localhost:9092
+
+
+-- kafka configuration CLI
+
+--  [ Start zookeeper and kafka server ]
+-- bin/zookeeper-server-start.sh config/zookeeper.properties
+-- bin\windows\kafka-server-start.bat config\server.properties
+
+service
+- sendHrResume-service
+    - BatchUserPublishWriter - read the data , send email request to notification-service via kafka
+
+- notification-service
+    - kafka-listener
+        - topic : email.request ,  ( groupId = "email-consumer-group" ) [ receive email request from sendHrResume-service ]
+        - topic : email.result.sendHr [ send email response to sendHrResume-service ]
+
+
+##############################
+create a topic in kafka using CLI
+- .\bin\windows\kafka-topics.bat --create --topic email-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+-- view all the topics
+ .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+ -- view more details of the topic
+    .\bin\windows\kafka-topics.bat --describe --topic email-topic --bootstrap-server localhost:9092

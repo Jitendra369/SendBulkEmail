@@ -1,13 +1,12 @@
 package com.sendhrresume.config;
 
-import com.sendhrresume.batch.PdfTableReader;
-import com.sendhrresume.batch.UserCustomWriter;
-import com.sendhrresume.batch.UserProcessor;
+import com.sendhrresume.batch.pdf.PdfTableReader;
+import com.sendhrresume.batch.pdf.UserCustomWriter;
+import com.sendhrresume.batch.pdf.UserProcessor;
 import com.sendhrresume.entity.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
@@ -55,7 +54,7 @@ public class BatchConfig {
     @Bean
     public Job pdfJob(JobRepository jobRepository, Step step1){
         return new JobBuilder("pdf-job", jobRepository)
-                .incrementer(new RunIdIncrementer())
+//                .incrementer(new RunIdIncrementer())
                 .start(step1)
                 .build();
     }
