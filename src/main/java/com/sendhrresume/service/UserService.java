@@ -31,11 +31,11 @@ public class UserService {
         return null;
     }
 
-    public int markEmailAsSent(int id ){
+    public int markEmailAsSent(String email){
         try {
-            userRepository.markEmailAsSent(id);
+            userRepository.markEmailAsSentFromEmail(email);
         } catch (Exception e) {
-           log.error("Failed to mark email as sent for user with id {}. Error: {}", id, e.getMessage());
+           log.error("Failed to mark email as sent for user with email {}. Error: {}", email, e.getMessage());
         }
         return -1;
     }

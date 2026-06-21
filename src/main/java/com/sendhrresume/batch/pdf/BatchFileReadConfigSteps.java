@@ -1,39 +1,38 @@
-package com.sendhrresume.config;
+package com.sendhrresume.batch.pdf;
 
-import com.sendhrresume.batch.pdf.PdfTableReader;
-import com.sendhrresume.batch.pdf.UserCustomWriter;
-import com.sendhrresume.batch.pdf.UserProcessor;
+import com.commondto.constant.JobNames;
 import com.sendhrresume.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class BatchConfig {
+@RequiredArgsConstructor
+public class BatchFileReadConfigSteps {
 
-    // custom reader, processor, writer
     @Bean
-    public PdfTableReader pdfUserReader(){
-        return new PdfTableReader();
-    }
-//
-//    @Bean
-//    public JpaItemWriter<User> writer(EntityManagerFactory emf){
-//        return new JpaItemWriterBuilder<User>()
-//                .entityManagerFactory(emf)
-//                .build();
-//    }
+    @StepScope
+    public PdfTableReader pdfUserReader(
+            @Value("#{jobParameters['filePath']}")
+            String filePath) {
 
-   /**
-    *  Read 5 users
-    Process 5 users
-    Write 5 users
-    Commit transaction*/
+        return new PdfTableReader(filePath);
+    }
+
+    /**
+     * Read 5 users
+     * Process 5 users
+     * Write 5 users
+     * Commit transaction
+     */
     @Bean
     public Step step1(JobRepository jobRepository,
                       PlatformTransactionManager transactionManager,
@@ -41,7 +40,7 @@ public class BatchConfig {
                       UserProcessor userProcessor,
 //                      JpaItemWriter<User> writer
                       UserCustomWriter writer
-                      ){
+    ) {
 
         return new StepBuilder("pdf-step", jobRepository)
                 .<User, User>chunk(5, transactionManager)
@@ -52,8 +51,8 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job pdfJob(JobRepository jobRepository, Step step1){
-        return new JobBuilder("pdf-job", jobRepository)
+    public Job pdfJob(JobRepository jobRepository, Step step1) {
+        return new JobBuilder(JobNames.PDF_READ_FILE, jobRepository)
 //                .incrementer(new RunIdIncrementer())
                 .start(step1)
                 .build();

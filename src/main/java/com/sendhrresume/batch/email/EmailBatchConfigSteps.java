@@ -1,8 +1,5 @@
-package com.sendhrresume.config;
+package com.sendhrresume.batch.email;
 
-import com.sendhrresume.batch.email.BatchUserProcessor;
-import com.sendhrresume.batch.email.BatchUserPublishWriter;
-import com.sendhrresume.batch.email.BatchUserReader;
 import com.sendhrresume.entity.User;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Step;
@@ -14,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class EmailBatchConfig {
+public class EmailBatchConfigSteps {
 
     // this is for huge data
     @Bean

@@ -17,12 +17,12 @@ public class EmailResultConsumer {
     private final UserService userService;
 
     @KafkaListener(
-            topics = "email.result.sendHr",
-            groupId = "email-result-consumer-group"
+            topics = "${kafka.topic.email-result}",
+            groupId = "${kafka.topic.email-result-consumergrp}"
     )
     public void onEmailResult(@Payload EmailResult emailResult){
         if (emailResult.isSuccess()){
-            userService.markEmailAsSent(Math.toIntExact(emailResult.getRecordId()));
+            userService.markEmailAsSent(emailResult.getEmail());
         }
     }
 }

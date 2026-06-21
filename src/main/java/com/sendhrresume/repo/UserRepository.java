@@ -18,5 +18,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query("UPDATE User u SET u.isEmailSentToCompany = true WHERE u.id = :id")
     int markEmailAsSent(@Param("id") int id );
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.isEmailSentToCompany = true WHERE u.email = :email")
+    int markEmailAsSentFromEmail(@Param("email") String email );
 }
 

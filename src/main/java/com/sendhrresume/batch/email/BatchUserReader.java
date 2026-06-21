@@ -4,6 +4,7 @@ import com.sendhrresume.entity.User;
 import com.sendhrresume.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BatchUserReader implements ItemReader<User> {
 
     private final UserService userService;
@@ -30,6 +32,7 @@ public class BatchUserReader implements ItemReader<User> {
     @Override
     public User read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
         // todo : need to change using table value [ isSendEmail = false ]
+        log.info("{}Reading user data for email sending, current index: {}", this.getClass().getName(), nextUserIndex);
         if (nextUserIndex < users.size()) {
             User nextUser = users.get(nextUserIndex);
             nextUserIndex++;
